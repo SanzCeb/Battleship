@@ -3,7 +3,6 @@ package battleship;
 import battleship.game.BattleshipGame;
 import battleship.game.ships.Ship;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -36,6 +35,7 @@ public class Main {
                 var message = BATTLESHIP_GAME.shot(coordinate);
                 System.out.println(BATTLESHIP_GAME);
                 System.out.println(message);
+                System.out.println(BATTLESHIP_GAME);
                 break;
             } catch (Exception ex) {
                 System.out.printf("%n%s Try again%n%n", ex.getMessage());

@@ -55,13 +55,6 @@ public class Cell implements Comparable <Cell>{
         return isAdjacentSameRow(cell) || isAdjacentSameColumn(cell);
     }
 
-    private boolean isAdjacentSameColumn(Cell cell) {
-        return this.column == cell.column && Math.abs(horizontalDistance(cell)) == 1;
-    }
-
-    private boolean isAdjacentSameRow(Cell cell) {
-        return this.row == cell.row && Math.abs(verticalDistance(cell)) == 1;
-    }
 
     public boolean isAtSameRow(Cell than) {
         return horizontalDistance(than) == 0;
@@ -75,6 +68,14 @@ public class Cell implements Comparable <Cell>{
         var shot = state == CellState.OCCUPIED;
         state = (shot) ? CellState.HIT : CellState.MISS;
         return shot;
+    }
+
+    private boolean isAdjacentSameColumn(Cell cell) {
+        return this.column == cell.column && Math.abs(horizontalDistance(cell)) == 1;
+    }
+
+    private boolean isAdjacentSameRow(Cell cell) {
+        return this.row == cell.row && Math.abs(verticalDistance(cell)) == 1;
     }
 }
 
