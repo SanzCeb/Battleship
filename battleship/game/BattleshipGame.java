@@ -44,7 +44,7 @@ public class BattleshipGame {
     }
 
 
-    private Optional<Cell> parseCell(String position) throws IOException {
+    private Optional<Cell> parseCell(String position){
         int row;
         int column;
         Optional<Cell> result;
@@ -60,9 +60,16 @@ public class BattleshipGame {
 
     @Override
     public String toString() {
-
         return BATTLESHIP_FIELD_DRAWER.drawBattleshipGame();
     }
 
 
+    public String shot(String position) throws Exception {
+        var cellPosition = parseCell(position);
+        if (cellPosition.isEmpty()) {
+            throw new  Exception("Error! You entered the wrong coordinates!");
+        }
+        return (cellPosition.get().shot()) ? "You hit a ship\n" : "You missed!\n";
+
+    }
 }

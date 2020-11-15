@@ -3,7 +3,8 @@ package battleship.game.field;
 enum CellState {
     FOG_OF_WAR('~'),
     OCCUPIED('O'),
-    HIT('X');
+    HIT('X'),
+    MISS('M');
 
     private final char symbol;
 
