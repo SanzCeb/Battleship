@@ -1,4 +1,4 @@
-package battleship.field;
+package battleship.game.field;
 
 public class Cell implements Comparable <Cell>{
 
@@ -61,6 +61,14 @@ public class Cell implements Comparable <Cell>{
 
     private boolean isAdjacentSameRow(Cell cell) {
         return this.row == cell.row && Math.abs(verticalDistance(cell)) == 1;
+    }
+
+    public boolean isAtSameRow(Cell than) {
+        return horizontalDistance(than) == 0;
+    }
+
+    public boolean isAtSameColumn(Cell than) {
+        return verticalDistance(than) == 0;
     }
 }
 

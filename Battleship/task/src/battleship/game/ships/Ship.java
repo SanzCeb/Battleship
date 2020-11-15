@@ -1,4 +1,4 @@
-package battleship.ships;
+package battleship.game.ships;
 
 public enum Ship {
     AIRCRAFT_CARRIER("Aircraft Carrier", 5),

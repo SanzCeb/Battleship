@@ -1,6 +1,6 @@
-package battleship.field;
+package battleship.game.field;
 
-public enum CellState {
+enum CellState {
     FOG_OF_WAR('~'),
     OCCUPIED('O'),
     HIT('X');

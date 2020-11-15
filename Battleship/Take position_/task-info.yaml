@@ -283,16 +283,22 @@ files:
         }
     }
   learner_created: false
-- name: src/battleship/field/BattleField.java
+- name: src/battleship/game/BattleshipGame.java
   visible: true
   learner_created: true
-- name: src/battleship/field/Cell.java
+- name: src/battleship/game/BattleshipGameDrawer.java
   visible: true
   learner_created: true
-- name: src/battleship/ships/Ship.java
+- name: src/battleship/game/field/Cell.java
   visible: true
   learner_created: true
-- name: src/battleship/field/CellState.java
+- name: src/battleship/game/field/CellState.java
+  visible: true
+  learner_created: true
+- name: src/battleship/game/field/BattleshipField.java
+  visible: true
+  learner_created: true
+- name: src/battleship/game/ships/Ship.java
   visible: true
   learner_created: true
 feedback_link: https://hyperskill.org/projects/125/stages/663/implement#comment

@@ -1,13 +1,13 @@
 package battleship;
 
-import battleship.field.BattleField;
-import battleship.ships.Ship;
+import battleship.game.BattleshipGame;
+import battleship.game.ships.Ship;
 
 import java.util.Scanner;
 
 public class Main {
     private final static Scanner SCANNER = new Scanner(System.in);
-    private final static BattleField BATTLE_FIELD = new BattleField();
+    private final static BattleshipGame BATTLE_FIELD = new BattleshipGame();
 
     public static void main(String[] args) {
 
