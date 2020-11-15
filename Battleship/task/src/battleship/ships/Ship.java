@@ -1,7 +1,11 @@
 package battleship.ships;
 
 public enum Ship {
-    AIRCRAFT_CARRIER("Aircraft Carrier", 5);
+    AIRCRAFT_CARRIER("Aircraft Carrier", 5),
+    BATTLESHIP("Battleship", 4),
+    CRUISER("Cruiser", 3),
+    SUBMARINE("Submarine", 3),
+    DESTROYER("Destroyer", 2);
 
     private final String name;
     private final int size;
@@ -16,5 +20,11 @@ public enum Ship {
         return String.format("%s (%d cells)", name, size);
     }
 
+    public String getShipName() {
+        return name;
+    }
 
+    public int getSize() {
+        return size;
+    }
 }
