@@ -28,6 +28,7 @@ public class Main {
 
     private static void takeAShot() {
         System.out.println("The game starts!");;
+        BATTLESHIP_GAME.hideBoats();
         System.out.println(BATTLESHIP_GAME);
         System.out.println("Take a shot!");
         while (true) {
@@ -36,6 +37,9 @@ public class Main {
                 var message = BATTLESHIP_GAME.shot(coordinate);
                 System.out.println(BATTLESHIP_GAME);
                 System.out.println(message);
+                BATTLESHIP_GAME.unhideBoats();
+                System.out.println(BATTLESHIP_GAME);
+                BATTLESHIP_GAME.hideBoats();
                 break;
             } catch (Exception ex) {
                 System.out.printf("%n%s Try again%n%n", ex.getMessage());

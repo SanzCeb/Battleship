@@ -72,4 +72,12 @@ public class BattleshipGame {
         return (cellPosition.get().shot()) ? "You hit a ship\n" : "You missed!\n";
 
     }
+
+    public void hideBoats() {
+        BATTLESHIP_FIELD_DRAWER.setBoatsHidden(true);
+    }
+
+    public void unhideBoats() {
+        BATTLESHIP_FIELD_DRAWER.setBoatsHidden(false);
+    }
 }

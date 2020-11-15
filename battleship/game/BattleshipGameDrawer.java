@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 class BattleshipGameDrawer {
     private final BattleshipField BATTLESHIP_FIELD;
     private final String BATTLEFIELD_HEADER;
+    private boolean boatsHidden;
 
     public BattleshipGameDrawer(BattleshipField battleShipField) {
         BATTLESHIP_FIELD = battleShipField;
@@ -19,7 +20,11 @@ class BattleshipGameDrawer {
     }
 
     public String drawBattleshipGame() {
-        return String.format("  %s%n%s%n", BATTLEFIELD_HEADER, drawBattleshipField());
+        var battleFieldStr = drawBattleshipField();
+        if (boatsHidden) {
+            battleFieldStr = battleFieldStr.replace('O', '~');
+        }
+        return String.format("  %s%n%s%n", BATTLEFIELD_HEADER, battleFieldStr);
     }
 
     private String drawBattleshipField() {
@@ -36,4 +41,7 @@ class BattleshipGameDrawer {
     }
 
 
+    public void setBoatsHidden(boolean boatsHidden) {
+        this.boatsHidden = boatsHidden;
+    }
 }
