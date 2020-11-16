@@ -22,21 +22,19 @@ public class Main {
         System.out.println(BATTLESHIP_GAME);
         placeShipOnTheBattleField(Ship.DESTROYER);
         System.out.println(BATTLESHIP_GAME);
-        takeAShot();
+        playBattleship();
     }
 
-    private static void takeAShot() {
+    private static void playBattleship() {
         System.out.println("The game starts!");;
         System.out.println(BATTLESHIP_GAME);
         System.out.println("Take a shot!");
-        while (true) {
+        while (!BATTLESHIP_GAME.isFinished()) {
             try {
                 var coordinate = SCANNER.nextLine();
                 var message = BATTLESHIP_GAME.shot(coordinate);
                 System.out.println(BATTLESHIP_GAME);
                 System.out.println(message);
-                System.out.println(BATTLESHIP_GAME);
-                break;
             } catch (Exception ex) {
                 System.out.printf("%n%s Try again%n%n", ex.getMessage());
             }
