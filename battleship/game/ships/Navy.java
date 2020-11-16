@@ -4,11 +4,11 @@ import battleship.game.field.BattleshipField;
 import battleship.game.field.Cell;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 public class Navy {
@@ -63,22 +63,11 @@ public class Navy {
     }
 
     private boolean isCellOccupiedBy(Ship ship, Cell target) {
-        var stern = getStern(ship);
-        var bow = getBow(ship);
-        var declaredMethods = Arrays.stream(BATTLESHIP_FIELD.getClass()
-                .getDeclaredMethods())
-                .filter(method -> Modifier.isPrivate(method.getModifiers()))
-                .filter(method -> method.getName().equals("cellRange"));
-        return declaredMethods.flatMap(method -> {
-            try {
-                method.setAccessible(true);
-                var cellsRange = (Stream<Cell>)method.invoke(BATTLESHIP_FIELD, stern, bow);
-                method.setAccessible(false);
-                return cellsRange;
-            } catch (IllegalAccessException | InvocationTargetException ignored) {
-            }
-            return null;
-        }).filter(Objects::nonNull).anyMatch(cell -> cell.compareTo(target) == 0);
+        var declaredMethods = Arrays.stream(BATTLESHIP_FIELD.getClass().getDeclaredMethods());
+        var privateMethods = declaredMethods.filter(method -> Modifier.isPrivate(method.getModifiers()));
+        var cellRangeMethod = privateMethods.filter(method -> method.getName().equals("cellRange")).findFirst();
+        var cellRange = cellRangeMethod.map(method -> tryGetShipCellsFromMethod(method, ship));
+        return cellRange.map(cells -> cells.anyMatch(cell -> cell.compareTo(target) == 0)).orElse(false);
     }
 
     public Cell getStern(Ship targetedShip) {
@@ -87,5 +76,18 @@ public class Navy {
 
     public Cell getBow(Ship targetedShip) {
         return shipsBow.get(targetedShip);
+    }
+
+    private Stream<Cell> tryGetShipCellsFromMethod(Method method, Ship ship) {
+        var stern = getStern(ship);
+        var bow = getBow(ship);
+        try {
+            method.setAccessible(true);
+            var cellsRange = (Stream<Cell>)method.invoke(BATTLESHIP_FIELD, stern, bow);
+            method.setAccessible(false);
+            return cellsRange;
+        } catch (IllegalAccessException | InvocationTargetException ignored) {
+        }
+        return null;
     }
 }

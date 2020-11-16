@@ -3,6 +3,7 @@ package battleship.game.field;
 import battleship.game.ships.Navy;
 import battleship.game.ships.Ship;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -114,18 +115,20 @@ public class BattleshipField {
     }
 
     private void removeShip(Ship targetedShip) {
-        var clazz = navy.getClass();
-        for (var field : clazz.getDeclaredFields()) {
-            field.setAccessible(true);
-            if (field.getName().contains("ships")){
-                try {
-                    field.setAccessible(true);
-                    var fieldClass = (Map<Ship, Cell>) field.get(navy);
-                    fieldClass.remove(targetedShip);
-                    numOfBoats = fieldClass.size();
-                } catch (IllegalAccessException ignored) {
+        for (var field : navy.getClass().getDeclaredFields()) {
+            removeShipFromNavy(field, targetedShip);
+        }
+    }
 
-                }
+    private void removeShipFromNavy(Field field, Ship targetedShip) {
+        if (field.getName().contains("ships")){
+            try {
+                field.setAccessible(true);
+                var fieldClass = (Map<Ship, Cell>) field.get(navy);
+                fieldClass.remove(targetedShip);
+                numOfBoats = fieldClass.size();
+            } catch (IllegalAccessException ignored) {
+
             }
         }
     }

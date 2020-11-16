@@ -4,6 +4,7 @@ import battleship.game.field.BattleshipField;
 import battleship.game.field.Cell;
 import battleship.game.ships.Ship;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -123,13 +124,16 @@ public class BattleshipGame {
     public boolean isFinished() {
         return Arrays.stream(BATTLESHIP_FIELD.getClass().getDeclaredFields())
                 .filter(field -> field.getName().equals("numOfBoats"))
-                .mapToInt(field -> {field.setAccessible(true);
-                    try {
-                        return field.getInt(BATTLESHIP_FIELD);
-                    } catch (IllegalAccessException ignored) {
-                        return -1;
-                    }
-                })
+                .mapToInt(this::getNumOfBoats)
                 .allMatch(numOfBoats -> numOfBoats == 0);
+    }
+
+    private int getNumOfBoats(Field field) {
+        try {
+            field.setAccessible(true);
+            return field.getInt(BATTLESHIP_FIELD);
+        } catch (IllegalAccessException ignored) {
+            return -1;
+        }
     }
 }
