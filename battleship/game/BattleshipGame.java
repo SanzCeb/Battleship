@@ -49,6 +49,44 @@ public class BattleshipGame {
         return getShotOutcome(cellPosition.get());
     }
 
+    public GameState getNewState() {
+        switch (state){
+            case P1_SETUP:
+                if (BATTLESHIP_FIELD.isFull()) {
+                    state = GameState.P2_SETUP;
+                }
+                break;
+            case P2_SETUP:
+                if (BATTLESHIP_FIELD_2.isFull()) {
+                    state = GameState.P1_SHELLS;
+                }
+                break;
+            case P1_SHELLS:
+                state = (isFinished()) ? GameState.END : GameState.P2_SHELLS;
+                break;
+            case P2_SHELLS:
+                state = (isFinished()) ? GameState.END : GameState.P1_SHELLS;
+                break;
+            case END:
+            default:
+                break;
+        }
+        return state;
+    }
+
+
+    public Ship[] getBattleShips() {
+        return Ship.values();
+    }
+
+    public BattleshipField getActiveBattlefield() {
+        return (state == GameState.P1_SETUP || state == GameState.P1_SHELLS) ? BATTLESHIP_FIELD : BATTLESHIP_FIELD_2;
+    }
+
+    public String getActivePlayer() {
+        return (state == GameState.P1_SETUP || state == GameState.P1_SHELLS) ? "Player 1" : "Player 2";
+    }
+
     private ShellState getShotOutcome(Cell target) {
         ShellState outcome;
         var shot = target.shot();
@@ -102,39 +140,6 @@ public class BattleshipGame {
         } catch (IllegalAccessException ignored) {
             return -1;
         }
-    }
-
-    public GameState getNewState() {
-        switch (state){
-            case P1_SETUP:
-                if (BATTLESHIP_FIELD.isFull()) {
-                    state = GameState.P2_SETUP;
-                }
-                break;
-            case P2_SETUP:
-                if (BATTLESHIP_FIELD_2.isFull()) {
-                    state = GameState.P1_SHELLS;
-                }
-                break;
-            case P1_SHELLS:
-                state = (isFinished()) ? GameState.END : GameState.P2_SHELLS;
-                break;
-            case P2_SHELLS:
-                state = (isFinished()) ? GameState.END : GameState.P1_SHELLS;
-                break;
-            case END:
-            default:
-                break;
-        }
-        return state;
-    }
-
-    public Ship[] getBattleShips() {
-        return Ship.values();
-    }
-
-    public BattleshipField getActiveBattlefield() {
-        return (state == GameState.P1_SETUP || state == GameState.P1_SHELLS) ? BATTLESHIP_FIELD : BATTLESHIP_FIELD_2;
     }
 
     private BattleshipField getInactiveBattlefield() {

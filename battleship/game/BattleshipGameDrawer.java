@@ -10,8 +10,8 @@ import java.util.stream.IntStream;
 public class BattleshipGameDrawer {
     private final BattleshipGame BATTLESHIP_GAME;
     private final String BATTLEFIELD_HEADER;
-    public BattleshipGameDrawer(BattleshipGame battleshipGame) {
 
+    public BattleshipGameDrawer(BattleshipGame battleshipGame) {
         BATTLESHIP_GAME = battleshipGame;
         BATTLEFIELD_HEADER = IntStream.
                 rangeClosed(1, 10)
@@ -19,9 +19,17 @@ public class BattleshipGameDrawer {
                 .collect(Collectors.joining(" "));
     }
 
-
     public String drawFogOfWarScreen() {
         return drawBattleField(drawFogOfWarRows());
+    }
+
+    public String drawPlayerScreen() {
+        var activeBattlefield = BATTLESHIP_GAME.getActiveBattlefield();
+        return drawBattleField(drawBattleshipRows(activeBattlefield));
+    }
+
+    public String drawGameScreen() {
+        return String.format("%s%s%n%s%n",drawFogOfWarScreen(), drawBorder(), drawPlayerScreen());
     }
 
     private String drawFogOfWarRows() {
@@ -42,11 +50,6 @@ public class BattleshipGameDrawer {
         return String.format("  %s%n%s%n", BATTLEFIELD_HEADER, battleFieldRows);
     }
 
-    public String drawGameSetupScreen() {
-        var activeBattlefield = BATTLESHIP_GAME.getActiveBattlefield();
-        return drawBattleField(drawBattleshipRows(activeBattlefield));
-    }
-
     private String drawBattleshipRows(BattleshipField activeBattleField) {
         return IntStream.rangeClosed(0, 9)
                 .mapToObj(numRow -> drawBattleshipRow(numRow, activeBattleField))
@@ -58,10 +61,6 @@ public class BattleshipGameDrawer {
                 .map(Cell::toString)
                 .collect(Collectors.joining(" "));
         return drawRow(numRow, battleshipFieldRow);
-    }
-
-    public String drawGameScreen() {
-        return String.format("%s%s%n%s%n",drawFogOfWarScreen(), drawBorder(), drawGameSetupScreen());
     }
 
     private static String drawBorder() {

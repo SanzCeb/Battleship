@@ -16,22 +16,16 @@ public class BattleshipCLI {
 
         do {
             switch (newState) {
-                case P1_SETUP:
-                    runP1Setup();
-                    newState = GAME.getNewState();
-                    break;
                 case P2_SETUP:
                     runEnterDialog();
-                    runP2Setup();
+                case P1_SETUP:
+                    runPlayerSetup();
                     newState = GAME.getNewState();
                     break;
                 case P1_SHELLS:
-                    runEnterDialog();
-                    runP1Shells();
-                    break;
                 case P2_SHELLS:
                     runEnterDialog();
-                    runP2Shells();
+                    runPlayerShell();
                     break;
                 default:
                     break;
@@ -40,28 +34,9 @@ public class BattleshipCLI {
 
     }
 
-    private void runP2Shells() {
+    private void runPlayerShell() {
         System.out.println(GAME_DRAWER.drawGameScreen());
-        System.out.println("Player 2, it's your turn:");
-        while (true) {
-            var coordinates = SYSTEM_IN_SCANNER.nextLine();
-            try {
-                var shellOutcome = GAME.shell(coordinates).toString();
-                if (GAME.getNewState() == GameState.END) {
-                    System.out.println("You sank the last ship. You won. Congratulations!");
-                } else {
-                    System.out.println(shellOutcome);
-                }
-                break;
-            } catch (Exception ex) {
-                System.out.printf("%n%s Try again%n%n", ex.getMessage());
-            }
-        }
-    }
-
-    private void runP1Shells() {
-        System.out.println(GAME_DRAWER.drawGameScreen());
-        System.out.println("Player 1, it's your turn:");
+        System.out.println(GAME.getActivePlayer() + ", it's your turn:");
         while (true) {
             var coordinates = SYSTEM_IN_SCANNER.nextLine();
             try {
@@ -83,23 +58,13 @@ public class BattleshipCLI {
         SYSTEM_IN_SCANNER.nextLine();
     }
 
-    private void runP2Setup() {
-        System.out.println("Player 2, place your ships on the game field");
+    private void runPlayerSetup() {
+        System.out.println(GAME.getActivePlayer() + ", place your ships on the game field");
         System.out.println(GAME_DRAWER.drawFogOfWarScreen());
         for (var ship : GAME.getBattleShips()) {
             printShipMessage(ship);
             runAddShipToTheBattleField(ship);
-            System.out.println(GAME_DRAWER.drawGameSetupScreen());
-        }
-    }
-
-    private void runP1Setup() {
-        System.out.println("Player 1, place your ships on the game field");
-        System.out.println(GAME_DRAWER.drawFogOfWarScreen());
-        for (var ship : GAME.getBattleShips()) {
-            printShipMessage(ship);
-            runAddShipToTheBattleField(ship);
-            System.out.println(GAME_DRAWER.drawGameSetupScreen());
+            System.out.println(GAME_DRAWER.drawPlayerScreen());
         }
     }
 
