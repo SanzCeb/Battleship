@@ -1,10 +1,10 @@
 package battleship.game.field;
 
+import battleship.game.ships.Navy;
 import battleship.game.ships.Ship;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Optional;
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -12,6 +12,7 @@ public class BattleshipField {
     private final Cell [][] BOARD;
     private int numOfBoats = 0;
     private final int MAX_NUM_OF_BOATS;
+    private final Navy navy;
 
     public BattleshipField(int battlefieldRows, int maxNumOfBoats) {
         this.BOARD = new Cell[battlefieldRows][battlefieldRows];
@@ -21,6 +22,7 @@ public class BattleshipField {
             }
         }
         MAX_NUM_OF_BOATS = maxNumOfBoats;
+        navy = new Navy(this);
     }
 
     public int getSize() {
@@ -37,6 +39,7 @@ public class BattleshipField {
 
     public void takeCellRange(Cell beginCell, Cell endCell) {
         cellRange(beginCell, endCell).forEach(Cell::setOccupied);
+        navy.addNewShip(beginCell, endCell);
         numOfBoats++;
     }
 
@@ -45,7 +48,7 @@ public class BattleshipField {
     }
 
     public boolean isFull() {
-        return this.numOfBoats == 5;
+        return this.numOfBoats == MAX_NUM_OF_BOATS;
     }
 
     public boolean cellRangeDoesNotExist(Cell beginCell, Cell endCell) {
@@ -96,4 +99,37 @@ public class BattleshipField {
         return Arrays.stream(new Cell[]{beginCell, endCell}).sorted().iterator();
     }
 
+    public boolean shipSunk(Cell target) {
+        Ship targetedShip = navy.getTargetedShip(target);
+        var shipSunk = targetedShip == null;
+        if (!shipSunk) {
+            Cell stern = navy.getStern(targetedShip);
+            Cell bow = navy.getBow(targetedShip);
+            shipSunk = cellRange(stern, bow).allMatch(Cell::isHit);
+            if (shipSunk) {
+                removeShip(targetedShip);
+            }
+
+        }
+        return shipSunk;
+    }
+
+    private void removeShip(Ship targetedShip) {
+        for (var field : navy.getClass().getDeclaredFields()) {
+            removeShipFromNavy(field, targetedShip);
+        }
+    }
+
+    private void removeShipFromNavy(Field field, Ship targetedShip) {
+        if (field.getName().contains("ships")){
+            try {
+                field.setAccessible(true);
+                var fieldClass = (Map<Ship, Cell>) field.get(navy);
+                fieldClass.remove(targetedShip);
+                numOfBoats = fieldClass.size();
+            } catch (IllegalAccessException ignored) {
+
+            }
+        }
+    }
 }

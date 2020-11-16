@@ -65,7 +65,7 @@ public class Cell implements Comparable <Cell>{
     }
 
     public boolean shot() {
-        var shot = state == CellState.OCCUPIED;
+        var shot = state == CellState.OCCUPIED || state == CellState.HIT;
         state = (shot) ? CellState.HIT : CellState.MISS;
         return shot;
     }
@@ -76,6 +76,10 @@ public class Cell implements Comparable <Cell>{
 
     private boolean isAdjacentSameRow(Cell cell) {
         return this.row == cell.row && Math.abs(verticalDistance(cell)) == 1;
+    }
+
+    public boolean isHit() {
+        return state == CellState.HIT;
     }
 }
 
