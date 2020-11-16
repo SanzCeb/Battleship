@@ -1,8 +1,9 @@
 package battleship.game;
 
-enum GameState {
-    ADDING_SHIPS,
-    READY_FOR_STARTING,
-    FOG_OF_WAR,
-    SHIPS_VISIBLE;
+public enum GameState {
+    P1_SETUP,
+    P2_SETUP,
+    P1_SHELLS,
+    P2_SHELLS,
+    END;
 }
